@@ -18,7 +18,12 @@ const Dashboard: React.FC = () => {
   const [local, setLocal] = useState('');
   const [diasemana, setDiasemana] = useState('');
   const [horario, setHorario] = useState('');
-  const [showLikeDislike, setShowLikeDislike] = useState({
+  const [showLike, setShowLike] = useState({
+    id: '',
+    value: 0,
+    type: ''
+  });
+  const [showDislike, setShowDislike] = useState({
     id: '',
     value: 0,
     type: ''
@@ -82,7 +87,7 @@ const Dashboard: React.FC = () => {
       url: 'http://localhost:3333/events/like/' + event_id
     })
       .then((res: AxiosResponse<IEvent>)=>{
-        setShowLikeDislike({
+        setShowLike({
           id: res.data.id,
           value: res.data.like,
           type: 'like'
@@ -99,7 +104,7 @@ const Dashboard: React.FC = () => {
       url: 'http://localhost:3333/events/dislike/' + event_id
     })
       .then((res: AxiosResponse<IEvent>)=>{
-        setShowLikeDislike({
+        setShowDislike({
           id: res.data.id,
           value: res.data.dislike,
           type: 'dislike'
@@ -122,20 +127,23 @@ const Dashboard: React.FC = () => {
         <input  type='text' name='diasemana' onChange={(event) => setDiasemana(event.target.value) } placeholder='Dia da Semana' />
         <input  type='text' name="horario" onChange={(event) => setHorario(event.target.value) } placeholder="Horário" />
         <button type="submit">Salvar</button>
+        
       </form>
+
 
       <table>
         <thead>
           <tr>
-            <th>nome do evento</th>
-            <th>local</th>
-            <th>diasemana</th>
-            <th>horario</th>
-            <th></th>
-            <th></th>
+            <th>Evento</th>
+            <th>Local</th>
+            <th>Semana</th>
+            <th>Horario</th>
+            <th>Ações</th>
+            <th>Like</th>
+            <th>Dislike</th>
           </tr>
         </thead>
-        <Link to="/total" >Total </Link>
+        
         <tbody>
           {eventos.map((evento)=>{
             return (
@@ -150,10 +158,18 @@ const Dashboard: React.FC = () => {
                   <button onClick={(event)=> handleDislike(event,evento.id)} >Dislike</button>
                 </td>
                 <td>
-                  {showLikeDislike.id === evento.id && (
+                  {showLike.id === evento.id && (
                     <>
-                      <p>{showLikeDislike.value}</p>
-                      <p>{showLikeDislike.type}</p>
+                      <p>{showLike.value}</p>
+                      <p>{showLike.type}</p>
+                    </>
+                  )}
+                </td>
+                <td>
+                  {showDislike.id === evento.id && (
+                    <>
+                      <p>{showDislike.value}</p>
+                      <p>{showDislike.type}</p>
                     </>
                   )}
                 </td>
